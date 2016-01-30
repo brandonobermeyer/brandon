@@ -13,8 +13,12 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
-            <Button Grid.Row="0" x:Name="LoadImage" Content="Pick Image" Click="LoadImage_Click" Margin="20,30,0,0"></Button>
-            <Image Grid.Row="1" x:Name="LoadImageDynam" />
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Grid.Row="0" x:Name="LoadImage" Content="Pick Image" Click="LoadImage_Click" Width="100"/>
+            <Button Grid.Row="0" x:Name="PreviousImage" Content="Previous" Click="PreviousImage_Click" Width="100" Margin="20,0"/>
+            <Button Grid.Row="0" x:Name="NextImage" Content="Next" Click="NextImage_Click" Width="100"/>
+        </StackPanel>
+        
+        <Image Grid.Row="1" x:Name="LoadImageDynam" />
     </Grid>
 </Page>

@@ -26,6 +26,9 @@ namespace PicsWheel
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        IReadOnlyList<StorageFile> files;
+        int currentImage;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -38,11 +41,40 @@ namespace PicsWheel
             picker.SuggestedStartLocation = PickerLocationId.Downloads;
             picker.FileTypeFilter.Add(".jpg");
 
-            StorageFile file = await picker.PickSingleFileAsync();
+            files = await picker.PickMultipleFilesAsync();
+            currentImage = 0;
 
-            if (file != null)
+            if (files != null)
             {
-                using (IRandomAccessStream fileStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
+                    using (IRandomAccessStream fileStream = await files[currentImage].OpenAsync(Windows.Storage.FileAccessMode.Read))
+                    {
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.SetSource(fileStream);
+                        LoadImageDynam.Source = bitmap;
+                    }
+            }
+        }
+
+        private async void NextImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentImage < files.Count && files != null)
+            {
+                currentImage++;
+                using (IRandomAccessStream fileStream = await files[currentImage].OpenAsync(Windows.Storage.FileAccessMode.Read))
+                {
+                    BitmapImage bitmap = new BitmapImage();
+                    bitmap.SetSource(fileStream);
+                    LoadImageDynam.Source = bitmap;
+                }
+            }
+        }
+
+        private async void PreviousImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentImage > 0 && files != null)
+            {
+                currentImage--;
+                using (IRandomAccessStream fileStream = await files[currentImage].OpenAsync(Windows.Storage.FileAccessMode.Read))
                 {
                     BitmapImage bitmap = new BitmapImage();
                     bitmap.SetSource(fileStream);
